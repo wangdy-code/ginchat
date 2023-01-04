@@ -1,0 +1,4 @@
+mysql:
+  database: "ginchat"
+  user: root
+  password: root
