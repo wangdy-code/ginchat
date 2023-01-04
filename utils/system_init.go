@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"ginchat/common"
+	"ginchat/config"
 	"ginchat/models"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -16,18 +17,24 @@ func InitConfig() error {
 	return common.VP.ReadInConfig()
 
 }
+
 func InitMysql() {
-	fmt.Println(common.VP.Get("mysql"))
-	db, err := gorm.Open(mysql.Open(fmt.Sprintf("root:root@tcp(127.0.0.1:3306)/ginchat")), &gorm.Config{})
+	mysqlConfig, err := config.GetMysqlConfig()
+	if err != nil {
+		panic("failed to read mysqlConfig")
+	}
+
+	DB, err := gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", mysqlConfig.User, mysqlConfig.PassWord,
+		mysqlConfig.Ip, mysqlConfig.Port, mysqlConfig.Database)), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.AutoMigrate(&models.UserBasic{})
+	DB.AutoMigrate(&models.UserBasic{})
 	//user := models.UserBasic{}
 	//user.Name = "张三"
-	//db.Create(&user)
-	userres := models.UserBasic{}
-	db.First(&userres, 2)
-	fmt.Println(userres)
-	db.Model(&models.UserBasic{}).Update("PassWord", "1234")
+	//DB.Create(&user)
+	//userres := models.UserBasic{}
+	//DB.First(&userres, 2)
+	//fmt.Println(userres)
+	//DB.Model(&models.UserBasic{}).Update("PassWord", "1234")
 }

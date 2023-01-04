@@ -3,8 +3,11 @@ package main
 import (
 	"ginchat/router"
 	"ginchat/utils"
+	"gorm.io/gorm"
 	"log"
 )
+
+var DB *gorm.DB
 
 func init() {
 	err := utils.InitConfig()
