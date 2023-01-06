@@ -32,3 +32,6 @@ func (u UserBasic) GetUserList() ([]*UserBasic, error) {
 	}
 	return userList, nil
 }
+func (u UserBasic) CreateUser(user UserBasic) error {
+	return common.DB.Model(u).Create(&user).Error
+}

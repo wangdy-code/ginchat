@@ -42,11 +42,4 @@ func InitMysql() {
 		panic("failed to connect database")
 	}
 	common.DB.AutoMigrate(&models.UserBasic{})
-	user := models.UserBasic{}
-	user.Name = "张三"
-	common.DB.Create(&user)
-	//userres := models.UserBasic{}
-	//DB.First(&userres, 2)
-	//fmt.Println(userres)
-	//DB.Model(&models.UserBasic{}).Update("PassWord", "1234")
 }
