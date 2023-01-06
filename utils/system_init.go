@@ -8,6 +8,10 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"log"
+	"os"
+	"time"
 )
 
 func InitConfig() error {
@@ -19,20 +23,28 @@ func InitConfig() error {
 }
 
 func InitMysql() {
+	newLogger := logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
+		SlowThreshold: time.Second,
+		LogLevel:      logger.Info,
+		Colorful:      true,
+	},
+	)
 	mysqlConfig, err := config.GetMysqlConfig()
 	if err != nil {
 		panic("failed to read mysqlConfig")
 	}
 
-	DB, err := gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", mysqlConfig.User, mysqlConfig.PassWord,
-		mysqlConfig.Ip, mysqlConfig.Port, mysqlConfig.Database)), &gorm.Config{})
+	common.DB, err = gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true",
+		mysqlConfig.User, mysqlConfig.PassWord,
+		mysqlConfig.Ip, mysqlConfig.Port, mysqlConfig.Database)),
+		&gorm.Config{Logger: newLogger})
 	if err != nil {
 		panic("failed to connect database")
 	}
-	DB.AutoMigrate(&models.UserBasic{})
-	//user := models.UserBasic{}
-	//user.Name = "张三"
-	//DB.Create(&user)
+	common.DB.AutoMigrate(&models.UserBasic{})
+	user := models.UserBasic{}
+	user.Name = "张三"
+	common.DB.Create(&user)
 	//userres := models.UserBasic{}
 	//DB.First(&userres, 2)
 	//fmt.Println(userres)

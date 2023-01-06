@@ -3,17 +3,20 @@ info:
 paths:
   /index:
     get:
-      consumes:
-      - application/json
-      description: do ping
-      produces:
-      - application/json
       responses:
         "200":
           description: OK
           schema:
             type: string
-      summary: ping example
       tags:
-      - example
+      - 首页
+  /user/getUserList:
+    get:
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: json
+      tags:
+      - 获取用户列表
 swagger: "2.0"

@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"ginchat/common"
+	"gorm.io/gorm"
+)
 
 type UserBasic struct {
 	gorm.Model
@@ -20,4 +23,12 @@ type UserBasic struct {
 
 func (u *UserBasic) TableName() string {
 	return "user_basic"
+}
+func (u UserBasic) GetUserList() ([]*UserBasic, error) {
+	userList := make([]*UserBasic, 10)
+	err := common.DB.Model(UserBasic{}).Where("id <> 0").Find(&userList).Error
+	if err != nil {
+		return nil, err
+	}
+	return userList, nil
 }
