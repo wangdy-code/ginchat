@@ -1,3 +1,6 @@
+definitions:
+  models.UserBasic:
+    type: object
 info:
   contact: {}
 paths:
@@ -10,6 +13,38 @@ paths:
             type: string
       tags:
       - 首页
+  /user/create:
+    post:
+      parameters:
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserBasic'
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: json
+      tags:
+      - 创建用户
+  /user/delete:
+    delete:
+      parameters:
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserBasic'
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: json
+      tags:
+      - 删除用户
   /user/getUserList:
     get:
       responses:

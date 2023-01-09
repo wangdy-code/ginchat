@@ -24,7 +24,7 @@ type UserBasic struct {
 func (u *UserBasic) TableName() string {
 	return "user_basic"
 }
-func (u UserBasic) GetUserList() ([]*UserBasic, error) {
+func (u UserBasic) List() ([]*UserBasic, error) {
 	userList := make([]*UserBasic, 10)
 	err := common.DB.Model(UserBasic{}).Where("id <> 0").Find(&userList).Error
 	if err != nil {
@@ -32,6 +32,12 @@ func (u UserBasic) GetUserList() ([]*UserBasic, error) {
 	}
 	return userList, nil
 }
-func (u UserBasic) CreateUser(user UserBasic) error {
+func (u UserBasic) Create(user UserBasic) error {
 	return common.DB.Model(u).Create(&user).Error
+}
+func (u *UserBasic) Delete() error {
+	return common.DB.Model(u).Delete(u).Error
+}
+func (u UserBasic) Update(user UserBasic) error {
+	return common.DB.Model(u).Updates(&user).Error
 }
